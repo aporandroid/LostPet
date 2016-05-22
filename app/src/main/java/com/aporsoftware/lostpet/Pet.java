@@ -11,15 +11,15 @@ public class Pet {
     private String petName;
     private String ownerName;
     private String phoneNumber;
-    private String emailAdsress;
+    private String emailAddress;
     private String petDescription;
     private String extraDescription;
 
     public Pet() {
     }
 
-    public Pet(String emailAdsress, String extraDescription, long id, double locationLat, double locationLon, String ownerName, String petDescription, String petName, String phoneNumber, String pictureUrl) {
-        this.emailAdsress = emailAdsress;
+    public Pet(String emailAddress, String extraDescription, long id, double locationLat, double locationLon, String ownerName, String petDescription, String petName, String phoneNumber, String pictureUrl) {
+        this.emailAddress = emailAddress;
         this.extraDescription = extraDescription;
         this.id = id;
         this.locationLat = locationLat;
@@ -32,11 +32,11 @@ public class Pet {
     }
 
     public String getEmailAdsress() {
-        return emailAdsress;
+        return emailAddress;
     }
 
     public void setEmailAdsress(String emailAdsress) {
-        this.emailAdsress = emailAdsress;
+        this.emailAddress = emailAdsress;
     }
 
     public String getExtraDescription() {
