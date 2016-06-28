@@ -3,6 +3,7 @@ package com.aporsoftware.lostpet;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,7 +17,12 @@ import java.io.ByteArrayOutputStream;
  * Created by gellert on 2016. 05. 20..
  */
 public class Pet {
-    private long id;
+    private final static String TAG = "Pet";
+
+
+    private boolean imageUploadPending;
+
+    private String id;
     private String pictureUrl;
     private String petName;
     private String ownerName;
@@ -40,17 +46,21 @@ public class Pet {
         "extraDescription"};
 
     public Pet() {
+        imageUploadPending = false;
     }
 
-    public Pet(String emailAddress, String extraDescription, long id, String ownerName, String petDescription, String petName, String phoneNumber, String pictureUrl) {
+    public Pet(String address, String emailAddress, String extraDescription, String id, Bitmap image, String ownerName, String petDescription, String petName, String phoneNumber, String species) {
+        this.address = address;
         this.emailAddress = emailAddress;
         this.extraDescription = extraDescription;
         this.id = id;
+        this.image = image;
         this.ownerName = ownerName;
         this.petDescription = petDescription;
         this.petName = petName;
         this.phoneNumber = phoneNumber;
-        this.pictureUrl = pictureUrl;
+        this.species = species;
+        imageUploadPending = false;
     }
 
     public String getEmailAddress() {
@@ -69,11 +79,11 @@ public class Pet {
         this.extraDescription = extraDescription;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -140,10 +150,20 @@ public class Pet {
     public void setImage(Bitmap image) {
         this.image = image;
     }
+
+    public boolean isImageUploadPending() {
+        return imageUploadPending;
+    }
+
+    public void setImageUploadPending(boolean imageUploadPending) {
+        this.imageUploadPending = imageUploadPending;
+    }
+
     public void uploadImage(){
         if(image == null){
             return;
         }
+        imageUploadPending = true;
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://lostpet-d6102.appspot.com");
 
@@ -160,14 +180,18 @@ public class Pet {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                Log.e(TAG,exception.getStackTrace().toString());
                 setPictureUrl(null);
+                imageUploadPending = false;
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Log.v(TAG, taskSnapshot.getMetadata().getSizeBytes() + "bytes have been uploaded");
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 setPictureUrl(downloadUrl.toString());
+                imageUploadPending = false;
             }
         });
     }

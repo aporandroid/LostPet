@@ -28,9 +28,10 @@ public class ListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list,container,false);
-        mPetsListView = (ListView) container.findViewById(R.id.petsListView);
-        mPetsListView.setAdapter(new PetsAdapter());
+        View rootView = inflater.inflate(R.layout.fragment_list,container);
+
+        mPetsListView = (ListView) rootView.findViewById(R.id.petsListView);
+        mPetsListView.setAdapter(new PetsAdapter(getActivity()));
         return rootView;
     }
 
@@ -47,7 +48,7 @@ public class ListFragment extends Fragment {
                 //String[] keys = {"id","pictureUrl","locationLon","locationLat","petName",
                 //        "ownerName","phoneNumber", "emailAddress", "petDescription", "extraDescription"};
 
-                pet.setId(Long.valueOf(dataSnapshot.getKey()));
+                pet.setId(dataSnapshot.getKey());
                 pet.setPictureUrl(dataSnapshot.child(Pet.keys[0]).getValue(String.class));
                 pet.setPetName(dataSnapshot.child(Pet.keys[1]).getValue(String.class));
                 pet.setOwnerName(dataSnapshot.child(Pet.keys[2]).getValue(String.class));
@@ -65,7 +66,7 @@ public class ListFragment extends Fragment {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 int index = pets.indexOf(dataSnapshot.getKey());
                 if(index != -1){
-                    pets.get(index).setId(Long.valueOf(dataSnapshot.getKey()));
+                    pets.get(index).setId(dataSnapshot.getKey());
                     pets.get(index).setPictureUrl(dataSnapshot.child(Pet.keys[0]).getValue(String.class));
                     pets.get(index).setPetName(dataSnapshot.child(Pet.keys[1]).getValue(String.class));
                     pets.get(index).setOwnerName(dataSnapshot.child(Pet.keys[2]).getValue(String.class));
@@ -95,6 +96,10 @@ public class ListFragment extends Fragment {
         });
     }
     class PetsAdapter extends BaseAdapter{
+        Context ctxt;
+        PetsAdapter(Context context){
+            ctxt = context;
+        }
         @Override
         public int getCount() {
             return pets.size();
@@ -106,14 +111,14 @@ public class ListFragment extends Fragment {
         }
 
         @Override
-        public long getItemId(int position){
-            return position;
+        public long getItemId(int position) {
+            return Long.valueOf(pets.get(position).getId());
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = inf.inflate(R.layout.pets_single_row,parent,false);
+            LayoutInflater inf = (LayoutInflater) ctxt.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View row = inf.inflate(R.layout.pets_single_row,parent);
             TextView detailText = (TextView) row.findViewById(R.id.pet_detail_row);
             ImageView petImage = (ImageView) row.findViewById(R.id.pet_picture_row);
             Pet currentPet =(getItem(position));
