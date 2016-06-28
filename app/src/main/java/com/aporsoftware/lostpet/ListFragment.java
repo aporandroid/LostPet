@@ -120,7 +120,7 @@ public class ListFragment extends Fragment {
             ImageView petImage = (ImageView) row.findViewById(R.id.pet_picture_row);
             Pet currentPet =(getItem(position));
             detailText.setText(currentPet.getPetName());
-            //petImage.setImageBitmap(currentPet.getImage()); //TODO: ha megvan a függvéy, a zárójeleket ki kell venni!
+            //petImage.setImageBitmap(currentPet.getImage()); //TODO: ha megvan a függvéy, a zárójeleket ki kell venni!!!!!
             return row;
         }
     }
