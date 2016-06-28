@@ -87,7 +87,7 @@ public class NewPetFragment extends Fragment implements LocationListener {
         newPet.setPetDescription("Cute dog");
         newPet.setExtraDescription("Missing her");
 
-        takePicture();
+        //takePicture();
 
 
         addToUploadQueue(newPet);
@@ -146,8 +146,9 @@ public class NewPetFragment extends Fragment implements LocationListener {
     }
 
     public void uploadPets() {
+        ArrayList<Pet> shouldStay = new ArrayList<Pet>();
         for(Pet pet:uploadQueue) {
-            if (pet != null && mLocation != null) {
+            if (pet != null && mLocation != null && !pet.isImageUploadPending()) {
                 Firebase base = new Firebase("https://lostpet-d6102.firebaseio.com/pets");
                 Firebase p = base.push();
 
@@ -172,9 +173,11 @@ public class NewPetFragment extends Fragment implements LocationListener {
                 geoFire.setLocation(p.getKey(), mGeoLocation);
 
                 p.push();
+            } else{
+                shouldStay.add(pet);
             }
         }
-        uploadQueue.clear();
+        uploadQueue = shouldStay;
     }
 
     @Override

@@ -20,13 +20,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:textAppearanceLarge"
-                android:id="@+id/név"
-                android:text="@string/név"/>
+                android:id="@+id/nev"
+                android:text="@string/nev"/>
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText"
+                android:id="@+id/nevEditText"
                 android:layout_weight="1" />
         </LinearLayout>
         <LinearLayout
@@ -35,13 +35,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cím"
-                android:id="@+id/cím"
+                android:text="@string/cim"
+                android:id="@+id/cim"
                 android:textAppearance="?android:textAppearanceLarge"/>
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText2"
+                android:id="@+id/cimEditText"
                 android:layout_weight="1" />
         </LinearLayout>
 
@@ -54,12 +54,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/email"
-                android:id="@+id/e-mail"
+                android:id="@+id/email"
                 android:textAppearance="?android:textAppearanceLarge"/>
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText2"
+                android:id="@+id/emailEditText"
                 android:layout_weight="1" />
         </LinearLayout>
 
