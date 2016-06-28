@@ -28,14 +28,16 @@ public class ListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_list,container,false);
         mPetsListView = (ListView) container.findViewById(R.id.petsListView);
-        return inflater.inflate(R.layout.fragment_list,container);
+        mPetsListView.setAdapter(new PetsAdapter());
+        return rootView;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPetsListView.setAdapter(new PetsAdapter(getContext()));
+
         Firebase base = new Firebase("https://lostpet.firebaseio.com/pets");
 
         base.addChildEventListener(new ChildEventListener() {
@@ -93,10 +95,6 @@ public class ListFragment extends Fragment {
         });
     }
     class PetsAdapter extends BaseAdapter{
-        Context ctxt;
-        PetsAdapter(Context context){
-            ctxt = context;
-        }
         @Override
         public int getCount() {
             return pets.size();
@@ -109,13 +107,13 @@ public class ListFragment extends Fragment {
 
         @Override
         public long getItemId(int position){
-            return pets.get(position).getId();
+            return position;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inf = (LayoutInflater) ctxt.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = inf.inflate(R.layout.pets_single_row,parent);
+            LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View row = inf.inflate(R.layout.pets_single_row,parent,false);
             TextView detailText = (TextView) row.findViewById(R.id.pet_detail_row);
             ImageView petImage = (ImageView) row.findViewById(R.id.pet_picture_row);
             Pet currentPet =(getItem(position));
