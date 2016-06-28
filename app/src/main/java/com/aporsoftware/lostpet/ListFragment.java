@@ -1,12 +1,17 @@
 package com.aporsoftware.lostpet;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -19,17 +24,18 @@ import java.util.ArrayList;
 public class ListFragment extends Fragment {
     private final static String TAG = "ListFragment";
     public final ArrayList<Pet> pets = new ArrayList<Pet>();
-
+    private ListView mPetsListView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mPetsListView = (ListView) container.findViewById(R.id.petsListView);
         return inflater.inflate(R.layout.fragment_list,container);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mPetsListView.setAdapter(new PetsAdapter(getContext()));
         Firebase base = new Firebase("https://lostpet.firebaseio.com/pets");
 
         base.addChildEventListener(new ChildEventListener() {
@@ -85,5 +91,37 @@ public class ListFragment extends Fragment {
             public void onCancelled(FirebaseError firebaseError) {
             }
         });
+    }
+    class PetsAdapter extends BaseAdapter{
+        Context ctxt;
+        PetsAdapter(Context context){
+            ctxt = context;
+        }
+        @Override
+        public int getCount() {
+            return pets.size();
+        }
+
+        @Override
+        public Pet getItem(int position) {
+            return pets.get(position);
+        }
+
+        @Override
+        public long getItemId(int position){
+            return pets.get(position).getId();
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inf = (LayoutInflater) ctxt.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View row = inf.inflate(R.layout.pets_single_row,parent);
+            TextView detailText = (TextView) row.findViewById(R.id.pet_detail_row);
+            ImageView petImage = (ImageView) row.findViewById(R.id.pet_picture_row);
+            Pet currentPet =(getItem(position));
+            detailText.setText(currentPet.getPetName());
+            petImage.setImageBitmap(currentPet.getImage());
+            return row;
+        }
     }
 }

@@ -140,7 +140,6 @@ public class Pet {
     public void setImage(Bitmap image) {
         this.image = image;
     }
-
     public void uploadImage(){
         if(image == null){
             return;
