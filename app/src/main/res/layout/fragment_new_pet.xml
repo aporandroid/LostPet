@@ -20,13 +20,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:textAppearanceLarge"
-                android:id="@+id/nev"
-                android:text="@string/nev"/>
+                android:id="@+id/név"
+                android:text="@string/név"/>
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/nevEditText"
+                android:id="@+id/editText"
                 android:layout_weight="1" />
         </LinearLayout>
         <LinearLayout
@@ -35,13 +35,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cim"
-                android:id="@+id/cim"
+                android:text="@string/cím"
+                android:id="@+id/cím"
                 android:textAppearance="?android:textAppearanceLarge"/>
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/cimEditText"
+                android:id="@+id/editText2"
                 android:layout_weight="1" />
         </LinearLayout>
 
@@ -54,12 +54,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/email"
-                android:id="@+id/email"
+                android:id="@+id/e-mail"
                 android:textAppearance="?android:textAppearanceLarge"/>
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/emailEditText"
+                android:id="@+id/editText2"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/leírás"
+                android:id="@+id/leírás"
+                android:textAppearance="?android:textAppearanceLarge"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText2"
                 android:layout_weight="1" />
         </LinearLayout>
 
