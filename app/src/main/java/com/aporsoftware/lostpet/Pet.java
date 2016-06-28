@@ -22,28 +22,24 @@ public class Pet {
     private String ownerName;
     private String phoneNumber;
     private String emailAddress;
+    private String species;
+    private String address;
     private String petDescription;
     private String extraDescription;
     private Bitmap image;
 
     public final static String[] keys = new String[]{
-    "pictureUrl",
-    "petName",
-    "ownerName",
-    "phoneNumber",
-    "emailAddress",
-    "petDescription",
-    "extraDescription"};
+        "pictureUrl",
+        "petName",
+        "ownerName",
+        "phoneNumber",
+        "emailAddress",
+        "species",
+        "address",
+        "petDescription",
+        "extraDescription"};
 
     public Pet() {
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
     }
 
     public Pet(String emailAddress, String extraDescription, long id, String ownerName, String petDescription, String petName, String phoneNumber, String pictureUrl) {
@@ -57,12 +53,12 @@ public class Pet {
         this.pictureUrl = pictureUrl;
     }
 
-    public String getEmailAdsress() {
+    public String getEmailAddress() {
         return emailAddress;
     }
 
-    public void setEmailAdsress(String emailAdsress) {
-        this.emailAddress = emailAdsress;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getExtraDescription() {
@@ -119,6 +115,22 @@ public class Pet {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
     public Bitmap getImage() {

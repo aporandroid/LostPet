@@ -4,10 +4,12 @@ package com.aporsoftware.lostpet;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,11 +31,13 @@ public class NewPetFragment extends Fragment implements LocationListener {
     private final static String TAG = "NewPetFragment";
 
     private final static int LOCATION_REQUEST_CODE = 1;
+    private final static int PICTURE_REQUEST_CODE = 2;
 
     public Location mLocation;
     private LocationManager locationManager;
     private ArrayList<Pet> uploadQueue;
     private boolean haveValidLocation;
+    private Pet newPet;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,18 +76,36 @@ public class NewPetFragment extends Fragment implements LocationListener {
 
         startLocationUpdate();
 
-        Pet pet = new Pet();
+        newPet = new Pet();
 
-        pet.setPictureUrl("sample url");
-        pet.setPetName("Bob");
-        pet.setOwnerName("John");
-        pet.setPhoneNumber("06205932138");
-        pet.setEmailAddress("asdkm@gmail.com");
-        pet.setPetDescription("Cute dog");
-        pet.setExtraDescription("Missing her");
+        newPet.setPetName("Bob");
+        newPet.setOwnerName("John");
+        newPet.setPhoneNumber("06205932138");
+        newPet.setEmailAddress("asdkm@gmail.com");
+        newPet.setSpecies("labrador");
+        newPet.setAddress("Gyor, dr. Torda I. u. 13.");
+        newPet.setPetDescription("Cute dog");
+        newPet.setExtraDescription("Missing her");
+
+        takePicture();
 
 
-        addToUploadQueue(pet);
+        addToUploadQueue(newPet);
+    }
+
+    private void takePicture(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent,PICTURE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode){
+            case PICTURE_REQUEST_CODE:
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                newPet.setImage(photo);
+                //TODO:show image in the ImageView
+        }
     }
 
     private void startLocationUpdate() {
@@ -138,8 +160,10 @@ public class NewPetFragment extends Fragment implements LocationListener {
                 p.child(Pet.keys[2]).setValue(pet.getOwnerName());
                 p.child(Pet.keys[3]).setValue(pet.getPhoneNumber());
                 p.child(Pet.keys[4]).setValue(pet.getEmailAddress());
-                p.child(Pet.keys[5]).setValue(pet.getPetDescription());
-                p.child(Pet.keys[6]).setValue(pet.getExtraDescription());
+                p.child(Pet.keys[5]).setValue(pet.getSpecies());
+                p.child(Pet.keys[6]).setValue(pet.getAddress());
+                p.child(Pet.keys[7]).setValue(pet.getPetDescription());
+                p.child(Pet.keys[8]).setValue(pet.getExtraDescription());
 
                 GeoLocation mGeoLocation = new GeoLocation(mLocation.getLatitude(), mLocation.getLongitude());
                 //Log.i(TAG, mLocation.getLatitude() + " " + mLocation.getLongitude());

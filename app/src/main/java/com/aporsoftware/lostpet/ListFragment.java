@@ -45,8 +45,10 @@ public class ListFragment extends Fragment {
                 pet.setOwnerName(dataSnapshot.child(Pet.keys[2]).getValue(String.class));
                 pet.setPhoneNumber(dataSnapshot.child(Pet.keys[3]).getValue(String.class));
                 pet.setEmailAddress(dataSnapshot.child(Pet.keys[4]).getValue(String.class));
-                pet.setPetDescription(dataSnapshot.child(Pet.keys[5]).getValue(String.class));
-                pet.setExtraDescription(dataSnapshot.child(Pet.keys[6]).getValue(String.class));
+                pet.setSpecies(dataSnapshot.child(Pet.keys[5]).getValue(String.class));
+                pet.setAddress(dataSnapshot.child(Pet.keys[6]).getValue(String.class));
+                pet.setPetDescription(dataSnapshot.child(Pet.keys[7]).getValue(String.class));
+                pet.setExtraDescription(dataSnapshot.child(Pet.keys[8]).getValue(String.class));
 
                 pets.add(pet);
             }
@@ -61,8 +63,10 @@ public class ListFragment extends Fragment {
                     pets.get(index).setOwnerName(dataSnapshot.child(Pet.keys[2]).getValue(String.class));
                     pets.get(index).setPhoneNumber(dataSnapshot.child(Pet.keys[3]).getValue(String.class));
                     pets.get(index).setEmailAddress(dataSnapshot.child(Pet.keys[4]).getValue(String.class));
-                    pets.get(index).setPetDescription(dataSnapshot.child(Pet.keys[5]).getValue(String.class));
-                    pets.get(index).setExtraDescription(dataSnapshot.child(Pet.keys[6]).getValue(String.class));
+                    pets.get(index).setSpecies(dataSnapshot.child(Pet.keys[5]).getValue(String.class));
+                    pets.get(index).setAddress(dataSnapshot.child(Pet.keys[6]).getValue(String.class));
+                    pets.get(index).setPetDescription(dataSnapshot.child(Pet.keys[7]).getValue(String.class));
+                    pets.get(index).setExtraDescription(dataSnapshot.child(Pet.keys[8]).getValue(String.class));
                 }
             }
 
