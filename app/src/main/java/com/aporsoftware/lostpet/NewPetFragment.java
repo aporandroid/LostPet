@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,8 @@ import android.view.ViewGroup;
 import com.firebase.client.Firebase;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+
+import java.util.ArrayList;
 
 
 public class NewPetFragment extends Fragment implements LocationListener {
@@ -30,6 +31,8 @@ public class NewPetFragment extends Fragment implements LocationListener {
 
     public Location mLocation;
     private LocationManager locationManager;
+    private ArrayList<Pet> uploadQueue;
+    private boolean haveValidLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,9 +61,13 @@ public class NewPetFragment extends Fragment implements LocationListener {
         }
     }
 
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        uploadQueue = new ArrayList<Pet>();
+
+        mLocation = new Location("");
+        haveValidLocation = false;
 
         startLocationUpdate();
 
@@ -74,7 +81,8 @@ public class NewPetFragment extends Fragment implements LocationListener {
         pet.setPetDescription("Cute dog");
         pet.setExtraDescription("Missing her");
 
-        uploadPet(pet);
+
+        addToUploadQueue(pet);
     }
 
     private void startLocationUpdate() {
@@ -105,26 +113,41 @@ public class NewPetFragment extends Fragment implements LocationListener {
         }
     }
 
-    public void uploadPet(Pet pet) {
-        if (pet != null && mLocation != null) {
-            Firebase base = new Firebase("https://lostpet.firebaseio.com/pets");
-            Firebase p = base.push();
-
-            Log.i(TAG, p.getKey());
-
-            p.child("pictureUrl").setValue(pet.getPictureUrl());
-            p.child("petName").setValue(pet.getPetName());
-            p.child("ownerName").setValue(pet.getOwnerName());
-            p.child("phoneNumber").setValue(pet.getPhoneNumber());
-            p.child("emailAddress").setValue(pet.getEmailAddress());
-            p.child("petDescription").setValue(pet.getPetDescription());
-            p.child("extraDescription").setValue(pet.getExtraDescription());
-
-            GeoLocation mGeoLocation = new GeoLocation(mLocation.getLatitude(), mLocation.getLongitude());
-
-            GeoFire geoFire = new GeoFire(p);
-            geoFire.setLocation(p.getKey(), mGeoLocation);
+    public void addToUploadQueue(Pet pet){
+        if(pet!=null){
+            uploadQueue.add(pet);
+            if(haveValidLocation){
+                uploadPets();
+            }
         }
+    }
+
+    public void uploadPets() {
+        for(Pet pet:uploadQueue) {
+            if (pet != null && mLocation != null) {
+                Firebase base = new Firebase("https://lostpet-d6102.firebaseio.com/pets");
+                Firebase p = base.push();
+
+                //Log.i(TAG, p.getKey());
+
+                p.child(Pet.keys[0]).setValue(pet.getPictureUrl());
+                p.child(Pet.keys[1]).setValue(pet.getPetName());
+                p.child(Pet.keys[2]).setValue(pet.getOwnerName());
+                p.child(Pet.keys[3]).setValue(pet.getPhoneNumber());
+                p.child(Pet.keys[4]).setValue(pet.getEmailAddress());
+                p.child(Pet.keys[5]).setValue(pet.getPetDescription());
+                p.child(Pet.keys[6]).setValue(pet.getExtraDescription());
+
+                GeoLocation mGeoLocation = new GeoLocation(mLocation.getLatitude(), mLocation.getLongitude());
+                //Log.i(TAG, mLocation.getLatitude() + " " + mLocation.getLongitude());
+
+                GeoFire geoFire = new GeoFire(p);
+                geoFire.setLocation(p.getKey(), mGeoLocation);
+
+                p.push();
+            }
+        }
+        uploadQueue.clear();
     }
 
     @Override
@@ -132,6 +155,8 @@ public class NewPetFragment extends Fragment implements LocationListener {
         if(location != null){
             mLocation.setLatitude(location.getLatitude());
             mLocation.setLongitude(location.getLongitude());
+            haveValidLocation = true;
+            uploadPets();
         }
     }
 

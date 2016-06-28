@@ -13,6 +13,15 @@ public class Pet {
     private String petDescription;
     private String extraDescription;
 
+    public static String[] keys = new String[]{
+    "pictureUrl",
+    "petName",
+    "ownerName",
+    "phoneNumber",
+    "emailAddress",
+    "petDescription",
+    "extraDescription"};
+
     public Pet() {
     }
 

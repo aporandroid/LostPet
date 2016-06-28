@@ -40,13 +40,13 @@ public class ListFragment extends Fragment {
                 //        "ownerName","phoneNumber", "emailAddress", "petDescription", "extraDescription"};
 
                 pet.setId(Long.valueOf(dataSnapshot.getKey()));
-                pet.setPictureUrl(dataSnapshot.child("pictureUrl").getValue(String.class));
-                pet.setPetName(dataSnapshot.child("petName").getValue(String.class));
-                pet.setOwnerName(dataSnapshot.child("ownerName").getValue(String.class));
-                pet.setPhoneNumber(dataSnapshot.child("phoneNumber").getValue(String.class));
-                pet.setEmailAddress(dataSnapshot.child("emailAddress").getValue(String.class));
-                pet.setPetDescription(dataSnapshot.child("petDescription").getValue(String.class));
-                pet.setExtraDescription(dataSnapshot.child("extraDescription").getValue(String.class));
+                pet.setPictureUrl(dataSnapshot.child(Pet.keys[0]).getValue(String.class));
+                pet.setPetName(dataSnapshot.child(Pet.keys[1]).getValue(String.class));
+                pet.setOwnerName(dataSnapshot.child(Pet.keys[2]).getValue(String.class));
+                pet.setPhoneNumber(dataSnapshot.child(Pet.keys[3]).getValue(String.class));
+                pet.setEmailAddress(dataSnapshot.child(Pet.keys[4]).getValue(String.class));
+                pet.setPetDescription(dataSnapshot.child(Pet.keys[5]).getValue(String.class));
+                pet.setExtraDescription(dataSnapshot.child(Pet.keys[6]).getValue(String.class));
 
                 pets.add(pet);
             }
@@ -56,13 +56,13 @@ public class ListFragment extends Fragment {
                 int index = pets.indexOf(dataSnapshot.getKey());
                 if(index != -1){
                     pets.get(index).setId(Long.valueOf(dataSnapshot.getKey()));
-                    pets.get(index).setPictureUrl(dataSnapshot.child("pictureUrl").getValue(String.class));
-                    pets.get(index).setPetName(dataSnapshot.child("petName").getValue(String.class));
-                    pets.get(index).setOwnerName(dataSnapshot.child("ownerName").getValue(String.class));
-                    pets.get(index).setPhoneNumber(dataSnapshot.child("phoneNumber").getValue(String.class));
-                    pets.get(index).setEmailAddress(dataSnapshot.child("emailAddress").getValue(String.class));
-                    pets.get(index).setPetDescription(dataSnapshot.child("petDescription").getValue(String.class));
-                    pets.get(index).setExtraDescription(dataSnapshot.child("extraDescription").getValue(String.class));
+                    pets.get(index).setPictureUrl(dataSnapshot.child(Pet.keys[0]).getValue(String.class));
+                    pets.get(index).setPetName(dataSnapshot.child(Pet.keys[1]).getValue(String.class));
+                    pets.get(index).setOwnerName(dataSnapshot.child(Pet.keys[2]).getValue(String.class));
+                    pets.get(index).setPhoneNumber(dataSnapshot.child(Pet.keys[3]).getValue(String.class));
+                    pets.get(index).setEmailAddress(dataSnapshot.child(Pet.keys[4]).getValue(String.class));
+                    pets.get(index).setPetDescription(dataSnapshot.child(Pet.keys[5]).getValue(String.class));
+                    pets.get(index).setExtraDescription(dataSnapshot.child(Pet.keys[6]).getValue(String.class));
                 }
             }
 

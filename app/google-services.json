@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1035035273901",
+    "firebase_url": "https://lostpet-d6102.firebaseio.com",
+    "project_id": "lostpet-d6102",
+    "storage_bucket": "lostpet-d6102.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035035273901:android:e8c44aa5a527babd",
+        "android_client_info": {
+          "package_name": "com.aporsoftware.lostpet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1035035273901-or8f1uq0b81aog2br4pijpm702uqu6h5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD87sN7d-jByF3JtRDWiGlBOkoAfj2LIlM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
