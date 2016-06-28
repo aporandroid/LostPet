@@ -28,10 +28,10 @@ public class ListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list,container);
+        View rootView = inflater.inflate(R.layout.fragment_list,container,false);
 
         mPetsListView = (ListView) rootView.findViewById(R.id.petsListView);
-        mPetsListView.setAdapter(new PetsAdapter(getActivity()));
+        mPetsListView.setAdapter(new PetsAdapter());
         return rootView;
     }
 
@@ -96,10 +96,6 @@ public class ListFragment extends Fragment {
         });
     }
     class PetsAdapter extends BaseAdapter{
-        Context ctxt;
-        PetsAdapter(Context context){
-            ctxt = context;
-        }
         @Override
         public int getCount() {
             return pets.size();
@@ -117,8 +113,8 @@ public class ListFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inf = (LayoutInflater) ctxt.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = inf.inflate(R.layout.pets_single_row,parent);
+            LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View row = inf.inflate(R.layout.pets_single_row,parent,false);
             TextView detailText = (TextView) row.findViewById(R.id.pet_detail_row);
             ImageView petImage = (ImageView) row.findViewById(R.id.pet_picture_row);
             Pet currentPet =(getItem(position));
