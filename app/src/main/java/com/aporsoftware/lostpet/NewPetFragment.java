@@ -4,11 +4,9 @@ package com.aporsoftware.lostpet;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -23,13 +21,7 @@ import android.view.ViewGroup;
 import com.firebase.client.Firebase;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 
@@ -139,6 +131,8 @@ public class NewPetFragment extends Fragment implements LocationListener {
 
                 Log.i(TAG, p.getKey());
 
+                pet.uploadImage();
+
                 p.child(Pet.keys[0]).setValue(pet.getPictureUrl());
                 p.child(Pet.keys[1]).setValue(pet.getPetName());
                 p.child(Pet.keys[2]).setValue(pet.getOwnerName());
@@ -183,36 +177,5 @@ public class NewPetFragment extends Fragment implements LocationListener {
     public void onProviderDisabled(String provider) {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivity(intent);
-    }
-
-    private String uploadImage(String id, Bitmap bitmap){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://lostpet-d6102.appspot.com");
-
-        StorageReference imagesRef = storageRef.child("images");
-        StorageReference imageRef = imagesRef.child(id + ".png");
-
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = imageRef.putBytes(data);
-
-        final String[] imageUrl = new String[1];
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {}
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                imageUrl[0] = downloadUrl.toString();
-            }
-        });
-
-        return imageUrl[0];
     }
 }

@@ -1,5 +1,17 @@
 package com.aporsoftware.lostpet;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+
 /**
  * Created by gellert on 2016. 05. 20..
  */
@@ -12,8 +24,9 @@ public class Pet {
     private String emailAddress;
     private String petDescription;
     private String extraDescription;
+    private Bitmap image;
 
-    public static String[] keys = new String[]{
+    public final static String[] keys = new String[]{
     "pictureUrl",
     "petName",
     "ownerName",
@@ -106,5 +119,45 @@ public class Pet {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
+    }
+
+    public void uploadImage(){
+        if(image == null){
+            return;
+        }
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://lostpet-d6102.appspot.com");
+
+        StorageReference imagesRef = storageRef.child("images");
+        StorageReference imageRef = imagesRef.child(id + ".png");
+
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imageRef.putBytes(data);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                setPictureUrl(null);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                setPictureUrl(downloadUrl.toString());
+            }
+        });
     }
 }
