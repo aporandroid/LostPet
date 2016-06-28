@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,7 +129,7 @@ public class NewPetFragment extends Fragment implements LocationListener {
                 Firebase base = new Firebase("https://lostpet-d6102.firebaseio.com/pets");
                 Firebase p = base.push();
 
-                //Log.i(TAG, p.getKey());
+                Log.i(TAG, p.getKey());
 
                 p.child(Pet.keys[0]).setValue(pet.getPictureUrl());
                 p.child(Pet.keys[1]).setValue(pet.getPetName());
