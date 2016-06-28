@@ -6,8 +6,6 @@ package com.aporsoftware.lostpet;
 public class Pet {
     private long id;
     private String pictureUrl;
-    private double locationLon;
-    private double locationLat;
     private String petName;
     private String ownerName;
     private String phoneNumber;
@@ -18,12 +16,18 @@ public class Pet {
     public Pet() {
     }
 
-    public Pet(String emailAddress, String extraDescription, long id, double locationLat, double locationLon, String ownerName, String petDescription, String petName, String phoneNumber, String pictureUrl) {
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public Pet(String emailAddress, String extraDescription, long id, String ownerName, String petDescription, String petName, String phoneNumber, String pictureUrl) {
         this.emailAddress = emailAddress;
         this.extraDescription = extraDescription;
         this.id = id;
-        this.locationLat = locationLat;
-        this.locationLon = locationLon;
         this.ownerName = ownerName;
         this.petDescription = petDescription;
         this.petName = petName;
@@ -53,22 +57,6 @@ public class Pet {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public double getLocationLat() {
-        return locationLat;
-    }
-
-    public void setLocationLat(double locationLat) {
-        this.locationLat = locationLat;
-    }
-
-    public double getLocationLon() {
-        return locationLon;
-    }
-
-    public void setLocationLon(double locationLon) {
-        this.locationLon = locationLon;
     }
 
     public String getOwnerName() {
