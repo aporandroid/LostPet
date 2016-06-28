@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="név">name</string>
+    <string name="név">Name:</string>
+    <string name="hely">Lotacion:</string>
+    <string name="email">E-mail:</string>
 </resources>
