@@ -8,8 +8,8 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,13 +23,7 @@ import android.view.ViewGroup;
 import com.firebase.client.Firebase;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 
@@ -37,11 +31,13 @@ public class NewPetFragment extends Fragment implements LocationListener {
     private final static String TAG = "NewPetFragment";
 
     private final static int LOCATION_REQUEST_CODE = 1;
+    private final static int PICTURE_REQUEST_CODE = 2;
 
     public Location mLocation;
     private LocationManager locationManager;
     private ArrayList<Pet> uploadQueue;
     private boolean haveValidLocation;
+    private Pet newPet;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,18 +76,36 @@ public class NewPetFragment extends Fragment implements LocationListener {
 
         startLocationUpdate();
 
-        Pet pet = new Pet();
+        newPet = new Pet();
 
-        pet.setPictureUrl("sample url");
-        pet.setPetName("Bob");
-        pet.setOwnerName("John");
-        pet.setPhoneNumber("06205932138");
-        pet.setEmailAddress("asdkm@gmail.com");
-        pet.setPetDescription("Cute dog");
-        pet.setExtraDescription("Missing her");
+        newPet.setPetName("Bob");
+        newPet.setOwnerName("John");
+        newPet.setPhoneNumber("06205932138");
+        newPet.setEmailAddress("asdkm@gmail.com");
+        newPet.setSpecies("labrador");
+        newPet.setAddress("Gyor, dr. Torda I. u. 13.");
+        newPet.setPetDescription("Cute dog");
+        newPet.setExtraDescription("Missing her");
+
+        takePicture();
 
 
-        addToUploadQueue(pet);
+        addToUploadQueue(newPet);
+    }
+
+    private void takePicture(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent,PICTURE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode){
+            case PICTURE_REQUEST_CODE:
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                newPet.setImage(photo);
+                //TODO:show image in the ImageView
+        }
     }
 
     private void startLocationUpdate() {
@@ -139,13 +153,17 @@ public class NewPetFragment extends Fragment implements LocationListener {
 
                 Log.i(TAG, p.getKey());
 
+                pet.uploadImage();
+
                 p.child(Pet.keys[0]).setValue(pet.getPictureUrl());
                 p.child(Pet.keys[1]).setValue(pet.getPetName());
                 p.child(Pet.keys[2]).setValue(pet.getOwnerName());
                 p.child(Pet.keys[3]).setValue(pet.getPhoneNumber());
                 p.child(Pet.keys[4]).setValue(pet.getEmailAddress());
-                p.child(Pet.keys[5]).setValue(pet.getPetDescription());
-                p.child(Pet.keys[6]).setValue(pet.getExtraDescription());
+                p.child(Pet.keys[5]).setValue(pet.getSpecies());
+                p.child(Pet.keys[6]).setValue(pet.getAddress());
+                p.child(Pet.keys[7]).setValue(pet.getPetDescription());
+                p.child(Pet.keys[8]).setValue(pet.getExtraDescription());
 
                 GeoLocation mGeoLocation = new GeoLocation(mLocation.getLatitude(), mLocation.getLongitude());
                 //Log.i(TAG, mLocation.getLatitude() + " " + mLocation.getLongitude());
@@ -183,36 +201,5 @@ public class NewPetFragment extends Fragment implements LocationListener {
     public void onProviderDisabled(String provider) {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivity(intent);
-    }
-
-    private String uploadImage(String id, Bitmap bitmap){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://lostpet-d6102.appspot.com");
-
-        StorageReference imagesRef = storageRef.child("images");
-        StorageReference imageRef = imagesRef.child(id + ".png");
-
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = imageRef.putBytes(data);
-
-        final String[] imageUrl = new String[1];
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {}
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                imageUrl[0] = downloadUrl.toString();
-            }
-        });
-
-        return imageUrl[0];
     }
 }
